@@ -4,10 +4,10 @@
 ### How to install maise as a LAMMPS package:
 For the shortest pssible installation process, just do
 ```
-git clone https://github.com/maise-guide/maise-lammps.git MAISE; cd MAISE; make install
+git clone https://github.com/maise-guide/maise-lammps.git MAISE; make install DIR=MAISE
 ```
 Otherwise, here are some more detailed instructions.
-First, if you don't have lammps you'll have to get that first
+First, if you don't have lammps you'll have to get that
 ```
 git clone https://github.com/lammps/lammps.git
 ```

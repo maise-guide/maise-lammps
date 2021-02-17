@@ -1,9 +1,11 @@
 
+DIR = .
+
 initialize:
-	git submodule update --init --recursive
-	cd maise && make -j
+	cd $(DIR); git submodule update --init --recursive
+	cd $(DIR)/maise && make -j
 
 install: initialize
-	cd .. ; make yes-MAISE ; make mpi -j	
+	cd $(DIR)/.. ; make yes-MAISE ; make mpi -j	
 
 .PHONY: initialize
