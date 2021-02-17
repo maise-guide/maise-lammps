@@ -1,3 +1,4 @@
+
 # Maise in LAMMPS
 
 ### How to install maise as a LAMMPS package:
@@ -9,11 +10,24 @@ Then, enter the `lammps` source directory
 ```
 cd lammps/src
 ```
-Then, get the maise package for `lammps` (the `MAISE` at the end is important, don't take it out)
+get the maise package for `lammps` (the `MAISE` at the end is important, don't take it out)
 ```
 git clone https://github.com/maise-guide/maise-lammps.git MAISE
 ```
 Finally, add maise as you would any other package
 ```
 make yes-MAISE
+```
+If you want to add maise to your current version of `lammps`, you then have to make `lammps` as well
+```
+make mpi
+```
+
+If you ever want to remove maise from lammps, you can run:
+```
+make no-MAISE
+```
+and if you want to remove maise from your system entirely, run:
+```
+make no-MAISE; rm -rf MAISE
 ```
