@@ -1,6 +1,9 @@
 
-initialize_maise:
+initialize:
 	git submodule update --init --recursive
 	cd maise && make -j
 
-.PHONY: initialize_maise
+install: initialize
+	cd .. ; make yes-MAISE ; make mpi -j	
+
+.PHONY: initialize
