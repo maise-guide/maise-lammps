@@ -1,0 +1,3 @@
+[submodule "maise"]
+	path = maise
+	url = https://github.com/maise-guide/maise.git
