@@ -7,7 +7,7 @@ sed -i -e 's|\(^PKG_LIB.=.*\)\($(maise_LIB)\)\(.*\)|\1\3|' ../Makefile.package
 
 if (test $1 = 1) then
   # Install
-  (cd ../MAISE; make)
+  (cd ../MAISE; make initialize)
   cp ../MAISE/*_maise.* ..
   if (test -e ../Makefile.package) then
     sed -i -e "\|$maise_MAKE|d" ../Makefile.package.settings

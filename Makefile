@@ -1,6 +1,8 @@
 
 DIR = .
 
+default: install
+
 initialize:
 	cd $(DIR); git submodule update --init --recursive
 	cd $(DIR)/maise && make -j
