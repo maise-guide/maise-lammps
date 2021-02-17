@@ -1,9 +1,9 @@
 
 initialize_lammps: initialize_maise
-	cd .. && make mpi
+	cd .. && make mpi -j
 
 initialize_maise:
 	git submodule update --init --recursive
-	cd maise && make
+	cd maise && make -j
 
 .PHONY: initialize_maise
