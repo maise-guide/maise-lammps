@@ -1,12 +1,13 @@
 
 maise_MAKE="include ../MAISE/Makefile.maise"
 
+sed -i -e "\|$maise_MAKE|d" ../Makefile.package.settings
+sed -i -e 's|\(^PKG_INC.=.*\)\($(maise_INC)\)\(.*\)|\1\3|' ../Makefile.package
+sed -i -e 's|\(^PKG_LIB.=.*\)\($(maise_LIB)\)\(.*\)|\1\3|' ../Makefile.package
+
 if (test $1 = 1) then
   # Install
   (cd ../MAISE; make)
-  sed -i -e "\|$maise_MAKE|d" ../Makefile.package.settings
-  sed -i -e 's|\(^PKG_INC.=.*\)\($(maise_INC)\)\(.*\)|\1\3|' ../Makefile.package
-  sed -i -e 's|\(^PKG_LIB.=.*\)\($(maise_LIB)\)\(.*\)|\1\3|' ../Makefile.package
   cp ../MAISE/*_maise.* ..
   if (test -e ../Makefile.package) then
     sed -i -e "\|$maise_MAKE|d" ../Makefile.package.settings
