@@ -1,0 +1,21 @@
+
+
+units		metal
+boundary	p p p
+atom_style	atomic
+
+read_data	data.maise
+
+fix		1 all nve
+
+mass 		1 63.55
+mass		2 107.8682
+mass		3 196.966569
+
+pair_style	maise 6.8 0
+
+timestep	.01
+dump 		1 all custom 25 exampledump id element x y z fx fy fz
+thermo 		25
+
+run 100

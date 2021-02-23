@@ -241,7 +241,7 @@ void PairMaise::settings(int narg, char **arg)
   cut_global = utils::numeric(FLERR,arg[0],false,lmp);
   
   loflag = utils::inumeric(FLERR,arg[1],false,lmp);
-
+  
   if (loflag != 1 && loflag != 0)
     error->all(FLERR,"Illegal pair_style command");
 
