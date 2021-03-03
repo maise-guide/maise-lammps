@@ -441,12 +441,12 @@ void PairMaise::LOUTCAR(Cell *mC)
     system("rm temp ltemp");
     if (NLin==0){
 
-      printf("FORCES MATCH\n");
+      printf("LOUTCAR results:\nFORCES MATCH\n");
 
     }
   } else {
    
-    error->all(FLERR,"NO OUTCAR PLEASE CHANGE FLAG OR INSERT OUTCAR\n");
+    error->all(FLERR,"NO OUTCAR OR OUTCAR DOES NOT MATCH, PLEASE CHANGE FLAG OR INSERT OUTCAR\n");
  
   }
 }
