@@ -12,7 +12,7 @@ mass 		1 63.55
 mass		2 107.8682
 mass		3 196.966569
 
-pair_style	maise 6.8 1
+pair_style	maise 7.5 1
 
 timestep	.01
 dump 		1 all custom 25 exampledump id element x y z fx fy fz
