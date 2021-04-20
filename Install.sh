@@ -9,6 +9,7 @@ if (test $1 = 1) then
   # Install
   (cd ../MAISE; make initialize)
   cp ../MAISE/*_maise.* ..
+  cp ../MAISE/compute_maisestress.cpp ..
   if (test -e ../Makefile.package) then
     sed -i -e "\|$maise_MAKE|d" ../Makefile.package.settings
     echo $maise_MAKE >> ../Makefile.package.settings
@@ -18,6 +19,7 @@ if (test $1 = 1) then
 elif (test $1 = 0) then
   # Uninstall
   rm ../*_maise.*
+  rm ../compute_maisestress.cpp
   # if (test -e ../Makefile.package) then
   # fi
 else
