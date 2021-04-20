@@ -33,6 +33,8 @@ extern "C" {
 #include "compute.h"
 #include "compute_ke.h"
 #include "modify.h"
+#include "fix_box_relax.h"
+#include "thermo.h"
 
 #include <cstring>
 #include <iostream>
@@ -110,37 +112,26 @@ void PairMaise::compute(int eflag, int vflag)
   mND   = 0;
   mNP   = 4;
   mXT   = 1;
-  mC.p  = 0;
   x = atom->x;
   v = atom->v;
-  mP.EFS = 1;
 
   double mx;
   double my;
   double mz;
 
 // set maise lattice
-  for(i=0;i<3;i++){
-    if (i==0){
-      mx = domain->boxhi[0] - domain->boxlo[0];
-      my = 0;
-      mz = 0;
-    }
-    if (i==1){
-      mx = domain->xy;
-      my = domain->boxhi[1] - domain->boxlo[1];
-      mz = 0;
-    }
-    if (i==2){
-      mx = domain->xz;
-      my = domain->yz;
-      mz = domain->boxhi[2] - domain->boxlo[2];
-    }
-    /*domain->lattice->box2lattice(mx,my,mz);*/
-    mLAT[i][0] = mx;
-    mLAT[i][1] = my;
-    mLAT[i][2] = mz;
-  }  
+
+
+  mLAT[0][0] = domain->boxhi[0] - domain->boxlo[0];
+  mLAT[0][1] = 0.0;
+  mLAT[0][2] = 0.0;
+  mLAT[1][0] = domain->xy;
+  mLAT[1][1] = domain->boxhi[1] - domain->boxlo[1];
+  mLAT[1][2] = 0.0;
+  mLAT[2][0] = domain->xz;
+  mLAT[2][1] = domain->yz;
+  mLAT[2][2] = domain->boxhi[2] - domain->boxlo[2];
+    
 
 // set ND based on boundary properties
   for (i = 0; i < 3; i++)
@@ -166,6 +157,7 @@ void PairMaise::compute(int eflag, int vflag)
 	mPOSf[3*i+q] = x[i][q]; 
     }
   
+  
 // call maise
 /*  for (i=0;i<NT;i++)
     mC.spcz[i] = spcz[i];
@@ -174,9 +166,33 @@ void PairMaise::compute(int eflag, int vflag)
 
 // set energy
 
-  eng_coul = mC.E;
-  if (vflag_fdotr) virial_fdotr_compute();
 
+/*
+  double *vt;
+  for (i=0;i<mN;i++)
+    vt[i] = sqrt((atom->v[i][0]*atom->v[i][0])+(atom->v[i][1]*atom->v[i][1])+(atom->v[i][2]*atom->v[i][2]));
+*/  
+
+//  memcpy(mSTR, virial, sizeof(mSTR));
+
+
+  eng_vdwl = mC.E;
+
+//  eng_vdwl = (.5 * ((atom->v[i][0]*atom->v[i][0])+(atom->v[i][1]*atom->v[i][1])+(atom->v[i][2]*atom->v[i][2])) * atom->mass[atom->type[i]]);
+//  if (vflag_fdotr) virial_fdotr_compute();
+
+
+// greatest hail mary in physics history
+/*  
+  double *ke_vec;
+  for (i=0; i<3; i++)
+    ke_vec[i] = (.5 * ((atom->v[i][0]*atom->v[i][0])+(atom->v[i][1]*atom->v[i][1])+(atom->v[i][2]*atom->v[i][2])) * atom->mass[atom->type[i]]);
+
+// we apply our fake virial
+
+  for(i=0; i<3; i++)
+    virial[i] = (mSTR[i]*(domain->xprd*domain->yprd*domain->zprd)*force->nktv2P)-ke_vec[i];
+*/
 // set lammps forces
 
   for(i=0;i<mN;i++)
@@ -188,21 +204,30 @@ void PairMaise::compute(int eflag, int vflag)
     j++;
   }
 
-// print lammps forces three times
-/*
-  if(j<=2)
-  for(i=0;i<mN;i++)
-    for(q=0;q<3;q++)
-      printf("%d %d forces, pos, type = % lf, % lf, % d\n",i, q, f[i][q], x[i][q], atom->type[i]);
-  j++;
-*/
+//  if (vflag_fdotr) virial_fdotr_compute();
+
+
+  double lol[6];
+  for(i=0;i<6;i++){
+    lol[i] = mSTR[i]*160.2176565*10.0/CELL_VOL(&mC);
+  }
+
+  for(i=0;i<6;i++)
+    virial[i]=lol[i] * 1000.0;
+
+//  if(j<=2)
+//  for(i=0;i<mN;i++)
+//    for(q=0;q<3;q++)
+  printf("Stresses: % lf % lf % lf % lf % lf % lf mC.E: % lf mLATf: % lf box: % lf % lf\n",virial[0],virial[1],virial[2],virial[3],virial[4],virial[5],mC.E, mLATf[0], domain->boxhi[0], domain->boxlo[0]);
+//  j++;
+
 }
 
 /* ---------------------------------------------------------------------- */
 
 void PairMaise::compute_outer(int eflag, int vflag)
 {
- ev_init(eflag,vflag);
+// ev_init(eflag,vflag);
 }
 
 /* ----------------------------------------------------------------------
