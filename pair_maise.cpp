@@ -159,53 +159,20 @@ void PairMaise::compute(int eflag, int vflag)
   
   
 // call maise
-/*  for (i=0;i<NT;i++)
-    mC.spcz[i] = spcz[i];
-*/
+
   mH = CALL_MAISE(&mR, &mP, mW, &mL, &mC, mCODE, mN, mNM, mND, mNP, mXT, mATMN, mLATf, mPOSf, mFRCf, mSTR);
 
 // set energy
 
-
-/*
-  double *vt;
-  for (i=0;i<mN;i++)
-    vt[i] = sqrt((atom->v[i][0]*atom->v[i][0])+(atom->v[i][1]*atom->v[i][1])+(atom->v[i][2]*atom->v[i][2]));
-*/  
-
-//  memcpy(mSTR, virial, sizeof(mSTR));
-
-
   eng_vdwl = mC.E;
 
-//  eng_vdwl = (.5 * ((atom->v[i][0]*atom->v[i][0])+(atom->v[i][1]*atom->v[i][1])+(atom->v[i][2]*atom->v[i][2])) * atom->mass[atom->type[i]]);
-//  if (vflag_fdotr) virial_fdotr_compute();
-
-
-// greatest hail mary in physics history
-/*  
-  double *ke_vec;
-  for (i=0; i<3; i++)
-    ke_vec[i] = (.5 * ((atom->v[i][0]*atom->v[i][0])+(atom->v[i][1]*atom->v[i][1])+(atom->v[i][2]*atom->v[i][2])) * atom->mass[atom->type[i]]);
-
-// we apply our fake virial
-
-  for(i=0; i<3; i++)
-    virial[i] = (mSTR[i]*(domain->xprd*domain->yprd*domain->zprd)*force->nktv2P)-ke_vec[i];
-*/
 // set lammps forces
 
   for(i=0;i<mN;i++)
     for(q=0;q<3;q++)
       f[i][q] = mFRCf[3*i+q];
 
-  if(j<1 && loflag==1){
-    LOUTCAR(&mC);
-    j++;
-  }
-
-//  if (vflag_fdotr) virial_fdotr_compute();
-
+// pass stresses to our fake virial array (maisestress simply accepts this array and outputs it as the calculated stress values, this is to save time)
 
   double lol[6];
   for(i=0;i<6;i++){
@@ -215,19 +182,13 @@ void PairMaise::compute(int eflag, int vflag)
   for(i=0;i<6;i++)
     virial[i]=lol[i] * 1000.0;
 
-//  if(j<=2)
-//  for(i=0;i<mN;i++)
-//    for(q=0;q<3;q++)
-  printf("Stresses: % lf % lf % lf % lf % lf % lf mC.E: % lf mLATf: % lf box: % lf % lf\n",virial[0],virial[1],virial[2],virial[3],virial[4],virial[5],mC.E, mLATf[0], domain->boxhi[0], domain->boxlo[0]);
-//  j++;
-
 }
 
 /* ---------------------------------------------------------------------- */
 
 void PairMaise::compute_outer(int eflag, int vflag)
 {
-// ev_init(eflag,vflag);
+
 }
 
 /* ----------------------------------------------------------------------
@@ -428,7 +389,7 @@ double PairMaise::single(int /*i*/, int /*j*/, int /* itype */, int /* jtype */,
   fforce = 0.0;
   return 0.0;
 }
-
+/*
 void PairMaise::LOUTCAR(Cell *mC)
 {
 
@@ -475,3 +436,4 @@ void PairMaise::LOUTCAR(Cell *mC)
  
   }
 }
+*/

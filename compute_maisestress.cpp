@@ -30,9 +30,6 @@
 
 #include <cctype>
 #include <cstring>
-#include <iostream>
-#include <fstream>
-
 using namespace LAMMPS_NS;
 
 /* ---------------------------------------------------------------------- */
@@ -41,7 +38,6 @@ ComputeMaiseStress::ComputeMaiseStress(LAMMPS *lmp, int narg, char **arg) :
   Compute(lmp, narg, arg),
   vptr(nullptr), id_temp(nullptr), pstyle(nullptr)
 {
-  printf("Compute Maise Stress constructor\n");
   if (narg < 4) error->all(FLERR,"Illegal compute pressure command");
   if (igroup) error->all(FLERR,"Compute pressure must use group all");
 
@@ -296,17 +292,29 @@ void ComputeMaiseStress::compute_vector()
 
   if (dimension == 3) {
     inv_volume = 1.0 / (domain->xprd * domain->yprd * domain->zprd);
-    for (int i = 0; i < 4; i++){
-      vector[i] = (virial[i]);
-      printf("Compst: % lf\n", virial[i]);
+    virial_compute(6,3);
+    if (keflag) {
+      for (int i = 0; i < 6; i++)
+        vector[i] = (virial[i]);
+    } else
+      for (int i = 0; i < 6; i++)
+        vector[i] = virial[i];
+  } else {
+    inv_volume = 1.0 / (domain->xprd * domain->yprd);
+    virial_compute(4,2);
+    if (keflag) {
+      vector[0] = (ke_tensor[0] + virial[0]) * inv_volume * nktv2p;
+      vector[1] = (ke_tensor[1] + virial[1]) * inv_volume * nktv2p;
+      vector[3] = (ke_tensor[3] + virial[3]) * inv_volume * nktv2p;
+      vector[2] = vector[4] = vector[5] = 0.0;
+    } else {
+      vector[0] = virial[0] * inv_volume * nktv2p;
+      vector[1] = virial[1] * inv_volume * nktv2p;
+      vector[3] = virial[3] * inv_volume * nktv2p;
+      vector[2] = vector[4] = vector[5] = 0.0;
     }
-    vector[4] = virial[5];
-    vector[5] = virial[4];
-    printf("Is it working? \n");
   }
 }
-
-
 
 /* ---------------------------------------------------------------------- */
 

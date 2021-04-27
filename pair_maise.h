@@ -76,7 +76,7 @@ class PairMaise : public Pair {
   double **scale;
 
   virtual void allocate();
-  void LOUTCAR(Cell*);
+
 };
 
 }
