@@ -1,0 +1,19 @@
+#MAISE-LAMMPS Example Script 2 (nano)
+
+units		metal
+boundary	f f f
+atom_style	atomic
+
+read_data	data.maise
+
+mass 		1 107.8682
+mass		2 196.96657
+
+pair_style	maise 7.5 4
+
+dump 		dump_ID all custom 25 exampledump id element x y z fx fy fz
+thermo    	1
+thermo_style	custom step pe
+
+min_style cg
+minimize 1.0e-8 1.0e-8 10000 10000

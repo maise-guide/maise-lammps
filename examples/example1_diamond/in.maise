@@ -1,0 +1,26 @@
+#MAISE-LAMMPS Example Script 1
+
+units		metal
+boundary	p p p
+atom_style	atomic
+
+read_data	data.maise
+
+compute         press_ID all maisestress thermo_temp
+
+mass 		1 6.941
+mass            2 118.71
+
+pair_style	maise 7.5 4
+
+dump 		dump_ID all custom 25 exampledump id element x y z fx fy fz
+thermo    	1
+thermo_style	custom step ecouple enthalpy press pe
+thermo_modify	press press_ID
+
+fix             fix_ID all box/relax tri 100000.0 vmax .01
+fix_modify      fix_ID energy no virial no press press_ID
+
+
+min_style cg
+minimize 1.0e-8 1.0e-8 10000 10000

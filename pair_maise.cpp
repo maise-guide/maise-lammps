@@ -52,7 +52,7 @@ PairMaise::PairMaise(LAMMPS *lmp) : Pair(lmp) {
   scale = nullptr;
 
   j = 0;
-  loflag = 0;
+  NP = 0;
   
   comm_forward = 38;
   comm_reverse = 30;
@@ -110,7 +110,7 @@ void PairMaise::compute(int eflag, int vflag)
   mCODE = 0;
   mNM   = 500;
   mND   = 0;
-  mNP   = 4;
+  mNP   = NP;
   mXT   = 1;
   x = atom->x;
   v = atom->v;
@@ -226,10 +226,7 @@ void PairMaise::settings(int narg, char **arg)
 
   cut_global = utils::numeric(FLERR,arg[0],false,lmp);
   
-  loflag = utils::inumeric(FLERR,arg[1],false,lmp);
-  
-  if (loflag != 1 && loflag != 0)
-    error->all(FLERR,"Illegal pair_style command");
+  NP = utils::inumeric(FLERR,arg[1],false,lmp);
 
   // reset cutoffs that have been explicitly set
   if (allocated) {
