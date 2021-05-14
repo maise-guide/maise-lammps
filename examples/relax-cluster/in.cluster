@@ -4,7 +4,7 @@ units		metal
 boundary	f f f
 atom_style	atomic
 
-read_data	data.maise
+read_data	data.cluster
 
 mass 		1 107.8682
 mass		2 196.96657
