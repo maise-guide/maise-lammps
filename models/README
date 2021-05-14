@@ -1,0 +1,27 @@
+=======================================================================
+|               Module for Ab Initio Structure Evolution              |
+|                         version     maise.2.7                       |
+|                 https://github.com/maise-guide/maise                |
+=======================================================================
+|                   Library of interatomic potentials                 |
+=======================================================================
+
+a) nn_* models are neural network based potentials, trained with the MAISE code, and named as:
+
+   nn_(system name: series of elements)_d(dimensionality of the dataset used for the training)__v(model version)
+
+   e.g.:   nn_CuPdAg_d3_v0 is a NN model for the Cu-Pd-Ag ternary constructed using the 3D (bulk) dataset,
+           nn_CuAg_d0_v0   is a NN model for the Cu-Ag system trained on the bulk and nanoparticle datasets.
+
+   note:   1- version "0" models are the new generation of models constructed with maise-net script.
+   	   2- versions indicated by "p" are those which are used in previous publications.
+
+
+
+b) gp_* models are Gupta potential parameters, collected from the literature, and named as:
+
+   gp_(system name: series of elements)_d(dimensionality of the system that model is prepared for)_v(model version)
+
+   note:   1- GP models are collected from the literature (cited in the reference entry in the model file)
+              and were originally for nanoparticles.
+           2- The cut-off range of the models are adjusted to be usable for the bulk systems, hence gp_*_d3_* models are created.
